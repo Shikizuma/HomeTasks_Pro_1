@@ -6,7 +6,6 @@
 		{
 			DictionaryCollection dictionary = new DictionaryCollection();
 
-			// Додаємо переклади
 			dictionary.Add("яблуко", new TranslationPair("jabłko", "apple"));
 			dictionary.Add("автомобіль", new TranslationPair("samochód", "car"));
 			dictionary.Add("книга", new TranslationPair("książka", "book"));

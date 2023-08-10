@@ -7,22 +7,22 @@
 			FamilyTreeCollection familyTree = new FamilyTreeCollection();
 
 			familyTree.AddPerson("John", 1980);
-			familyTree.AddPerson("Jane", 1985);
-			familyTree.AddPerson("Alice", 2000);
-			familyTree.AddPerson("Bob", 2005);
+			familyTree.AddChild("John", "Alice", 2005);
+			familyTree.AddChild("John", "Bob", 2010);
+			familyTree.AddChild("Alice", "Eva", 2022);
 
 			List<Person> descendants = familyTree.GetDescendants("John");
 			Console.WriteLine("Descendants of John:");
-			foreach (var descendant in descendants)
+			foreach (Person person in descendants)
 			{
-				Console.WriteLine($"{descendant.Name} ({descendant.BirthYear})");
+				Console.WriteLine($"{person.Name} - {person.BirthYear}");
 			}
 
-			List<Person> relatives = familyTree.GetRelativesByBirthYear(2000);
-			Console.WriteLine("Relatives born in 2000:");
-			foreach (var relative in relatives)
+			List<Person> relatives = familyTree.GetRelativesByBirthYear("John", 2005);
+			Console.WriteLine("Relatives of John born in 2005:");
+			foreach (Person person in relatives)
 			{
-				Console.WriteLine($"{relative.Name} ({relative.BirthYear})");
+				Console.WriteLine($"{person.Name} - {person.BirthYear}");
 			}
 		}
 	}

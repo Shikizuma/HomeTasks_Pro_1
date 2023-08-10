@@ -8,109 +8,70 @@ namespace Task3
 {
 	internal class FamilyTreeCollection
 	{
-		private Person root;
+		private List<Person> people = new List<Person>();
 
 		public void AddPerson(string name, int birthYear)
 		{
-			Person newPerson = new Person { Name = name, BirthYear = birthYear };
-
-			if (root == null)
-			{
-				root = newPerson;
-			}
-			else
-			{
-				AddToTree(root, newPerson);
-			}
+			people.Add(new Person { Name = name, BirthYear = birthYear });
 		}
 
-		private void AddToTree(Person currentPerson, Person newPerson)
+		public void AddChild(string parentName, string childName, int childBirthYear)
 		{
-			if (newPerson.BirthYear > currentPerson.BirthYear)
+			Person parent = people.Find(p => p.Name == parentName);
+			if (parent != null)
 			{
-				if (currentPerson.Children.Count == 0)
-				{
-					currentPerson.Children.Add(newPerson);
-					newPerson.Parent = currentPerson;
-				}
-				else
-				{
-					foreach (var child in currentPerson.Children)
-					{
-						AddToTree(child, newPerson);
-					}
-				}
+				parent.Children.Add(new Person { Name = childName, BirthYear = childBirthYear });
 			}
 		}
 
 		public void RemovePerson(string name)
 		{
-			Person personToRemove = FindPerson(root, name);
-			if (personToRemove != null)
-			{		
-				if (personToRemove.Parent != null)
+			Person person = people.Find(p => p.Name == name);
+			if (person != null)
+			{
+				people.Remove(person);
+				foreach (Person p in people)
 				{
-					personToRemove.Parent.Children.Remove(personToRemove);
-				}
-
-				foreach (var child in personToRemove.Children)
-				{
-					child.Parent = personToRemove.Parent;
+					p.Children.RemoveAll(child => child.Name == name);
 				}
 			}
 		}
 
 		public List<Person> GetDescendants(string name)
 		{
-			List<Person> descendants = new List<Person>();
-			Person person = FindPerson(root, name);
+			Person person = people.Find(p => p.Name == name);
 			if (person != null)
 			{
+				List<Person> descendants = new List<Person>();
 				GetDescendantsRecursive(person, descendants);
-			}
-			return descendants;
-		}
-
-		private Person FindPerson(Person currentPerson, string name)
-		{
-			if (currentPerson.Name == name)
-			{
-				return currentPerson;
-			}
-			foreach (var child in currentPerson.Children)
-			{
-				var foundPerson = FindPerson(child, name);
-				if (foundPerson != null)
-				{
-					return foundPerson;
-				}
+				return descendants;
 			}
 			return null;
 		}
 
-		private void GetDescendantsRecursive(Person currentPerson, List<Person> descendants)
+		private void GetDescendantsRecursive(Person person, List<Person> descendants)
 		{
-			descendants.Add(currentPerson);
-			foreach (var child in currentPerson.Children)
+			foreach (Person child in person.Children)
 			{
+				descendants.Add(child);
 				GetDescendantsRecursive(child, descendants);
 			}
 		}
 
-		public List<Person> GetRelativesByBirthYear(int birthYear)
+		public List<Person> GetRelativesByBirthYear(string name, int birthYear)
 		{
 			List<Person> relatives = new List<Person>();
-			GetRelativesByBirthYearRecursive(root, birthYear, relatives);
+			GetRelativesByBirthYearRecursive(people.Find(p => p.Name == name), birthYear, relatives);
 			return relatives;
 		}
 
-		private void GetRelativesByBirthYearRecursive(Person currentPerson, int birthYear, List<Person> relatives)
+		private void GetRelativesByBirthYearRecursive(Person person, int birthYear, List<Person> relatives)
 		{
-			if (currentPerson.BirthYear == birthYear)
+			if (person.BirthYear == birthYear)
 			{
-				relatives.Add(currentPerson);
+				relatives.Add(person);
 			}
-			foreach (var child in currentPerson.Children)
+			foreach (Person child in person.Children)
 			{
 				GetRelativesByBirthYearRecursive(child, birthYear, relatives);
 			}

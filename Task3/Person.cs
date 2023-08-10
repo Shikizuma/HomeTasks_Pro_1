@@ -10,7 +10,6 @@ namespace Task3
 	{
 		public string Name { get; set; }
 		public int BirthYear { get; set; }
-		public Person Parent { get; set; }
 		public List<Person> Children { get; set; } = new List<Person>();
 	}
 }

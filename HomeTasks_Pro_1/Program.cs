@@ -26,9 +26,13 @@
 			{
                 Console.WriteLine(item);
             }
+
             Console.WriteLine(new string('-', 25));
+
             Console.WriteLine(monthCollection.GetMonthByNumber(12));
+
 			Console.WriteLine(new string('-', 25));
+
 			Month[] newMounth = monthCollection.GetMonthsByDays(31);
 			foreach (Month item in newMounth)
 			{
